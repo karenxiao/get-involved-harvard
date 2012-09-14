@@ -1,0 +1,32 @@
+************************************************
+* Documentation
+* CS50 final project - Get Involved Harvard
+* 
+* Kai Fei (kaifei) & Karen Xiao (kxiao)
+************************************************
+
+The idea for this website came from our experiences as dazed and confused Harvard freshmen. We arrived at Harvard overwhelmed by the huge number of student organizations on campus, and not really sure which ones to join. The Office of Student Life's list of organizations isn't well implemented and doesn't allow students to search for different organizations.The activities fair was a wonderfully hectic occasion, but didn't really allow us to learn more on our own and browse the club's website. So we got the idea for Get Involved Harvard: a virtual activities fair of sorts that allowed pre-frosh and freshmen to get an idea of what clubs they would be interested in joining. 
+
+Ultimately, we would like this to be a good resource for new students. We hope that the Admissions Office and Freshman Dean's Office will provide this link to pre-frosh wanting to learn more about student organizations. 
+
+If students find our website useful, we have many more ideas for additional features that could be implemented and hope that our project doesn't just end at the conclusion of CS50. Nevertheless, we are excited with what we've made and hope that other students will find it useful as well!
+
+
+Our website includes three main features:
+
+SEARCH
+Our website is an improvement on the official Office of Student Life Student Organization website because it features a search bar. The website instantly returns student organizations that match the user's query. Students can also narrow down their search by selecting a certain category or choosing the size of their desired organization through the use of checkboxes. The checkboxes are designed so that any organization that matches at least one value under "size" and at least one value under "category" will display if the search box term is also found in this organization's information. If the search box is blank and both checkboxes are set to "Any", all the organizations will show up. 
+
+Also, clicking the "Any" checkbox will clear the other boxes and clicking any of the other checkboxes will clear the "Any" checkbox. This features means less clicking of boxes for users who want to simply search all "sizes" and "categories". 
+
+Students can then learn more about the organization by clicking on the club's name, revealing details about the club and click again to minimize the information. 
+
+Also, all of the organization information came directly from Harvard OSL website, so please contact them if any of the information is incorrect or missing.  
+
+
+FAVORITES
+This feature allows students to create a list of their favorite organizations. To add a club to the favorites list, simply expand the club's info and click on the link that says "add to favorites." This will then add the club to the list of favorites on the left-hand column on the search.php page. This is just displays a list of organization names, so in order to view all their favorited clubs and detailed information about the club, the student can click on the "favorites" tab at the top to see their full list and edit their favorites list. 
+
+
+LOGIN
+We allow students to login to our site using Facebook. The login feature makes it easier for students to save their favorites list and come back to review and edit it later. 

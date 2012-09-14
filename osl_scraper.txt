@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'net/http'
+require 'uri'
+require 'cgi'
+
+fin = File.new("links.txt", "r")
+fout = File.new("orgs2.txt", "w")
+
+regex_str = '<h2>(.*?)<\/h2>' + # Group title
+	'.*?<p>(.*?)<\/p>' + # Purpose Statement
+	'.*?<\/strong>(.*?)<\/li>' + # Associated Categories -- needs more regex
+	'.*?<\/strong>(.*?)<\/li>' + # Number of members
+	'.*?<\/strong>(.*?)<\/li>' + # Involvement
+	'.*?<a.*?>(.*?)<\/a>' + # Group Email
+	'.*?<a.*?>(.*?)<\/a>' + # Group Website
+	'.*?<ul>(.*?)<\/ul>' + # Mailing Address -- needs more regex
+	'.*?<\/strong>(.*?)<\/li>' + # Month of Officer Elections
+	'.*?<\/strong>(.*?)<\/li>' # Information Last Updated
+regex = Regexp.new(regex_str, Regexp::MULTILINE)
+categories = [
+	'Group Title',
+	'Purpose Statement',
+	'Associated Categories',
+	'Number of Members',
+	'Involvement',
+	'Group Email',
+	'Group Website',
+	'Mailing Address',
+	'Month of Officer Elections',
+	'Information Last Updated'
+]
+
+i = 1
+fin.each do |line|
+	puts "processing URI #{i} of 426"
+	i += 1
+
+	uri = URI.parse(line);
+	res = Net::HTTP.get_response(uri)
+	body = CGI.unescapeHTML(res.body)
+
+	matches = regex.match(body)
+	# puts "#{matches.length} matches"
+	fout.puts "{"
+	categories.each_index do |i|
+		if categories[i] == 'Associated Categories'
+			cats = matches[i+1].scan(/<a.*?>(.*?)<\/a>/).join(", ")
+			fout.puts "#{categories[i].delete(' ')}: "+"\""+"#{cats.gsub(/\n/, "").gsub(/\r/, "").gsub(/\'/, "&#39;").gsub(/\"/, "&#34;")}"+"\","
+		elsif categories[i] == 'Mailing Address'
+			addr = matches[i+1].scan(/<li>(.*?)<\/li>/).join(" ")
+			fout.puts "#{categories[i].delete(' ')}: "+"\""+"#{addr.gsub(/\n/, "").gsub(/\r/, "").gsub(/\'/, "&#39;").gsub(/\"/, "&#34;")}"+"\","
+		elsif categories[i] == 'Information Last Updated'
+			fout.puts "#{categories[i].delete(' ')}: "+"\""+"#{matches[i+1].strip.gsub(/\n/, "").gsub(/\r/, "").gsub(/\'/, "&#39;").gsub(/\"/, "&#34;")}"+"\""		
+		else
+			fout.puts "#{categories[i].delete(' ')}: "+"\""+"#{matches[i+1].strip.gsub(/\n/, "").gsub(/\r/, "").gsub(/\'/, "&#39;").gsub(/\"/, "&#34;")}"+"\","
+		end
+	end
+	fout.puts "},"
+end

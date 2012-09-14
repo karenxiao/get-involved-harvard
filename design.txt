@@ -1,0 +1,41 @@
+************************************************
+* Design
+* CS50 final project - Get Involved Harvard
+* 
+* Kai Fei (kaifei) & Karen Xiao (kxiao)
+************************************************
+
+Breakdown of our three main features:
+
+SEARCH
+We decided to implement our search feature using Javascript because this allowed for the results to be returned at optimal speed and requiring the least effort from the user. The current Harvard OSL website requires the user to constantly switch back and forth bwetween pages to view different websites, making searching really inefficient and annoying. So we decided to do instant search because we felt it was would be the most efficient way to deliver the information, without having the user navigate back and forth between multiple pages. 
+
+The instant search actually required a time delay so that the search function doesn't initiate faster than the browser can register what the user put into the search bar. Before the delay, the instant search results were always one keystroke behind what the user was doing, resulting in incorrect searches. Only after some trial and error did we discover that putting in a simple time delay got rid of the problem. 
+
+The maximizing and minimizing of the information without having the user navigate away from the page also saves time and effort for the user. It's implemented through javascript as well and through the use of tag id's. Every entry on the table of results or favorites has a different id, so the functions used to maximize and minimize information, (dropdown(), dropfav(), dropup(), dropupfav()), all use document.getElementById() to location the correct entry and replace the inner html.  
+
+All the information for the clubs came from the website of the Office of Student Life. Originally, we tried entering all the information by hand, but we quickly found that this was tedious and a waste of our time. After consulting some people, we decided to pull the information from the website directly using a program written in Ruby. We've included the code for this program in a file titled osl_scraper.txt. We also included links.txt, a page of all the links to student organizations that is used by the scraper to navigate to all the information. 
+
+The organizations and information are stored in an array ORGANIZATIONS in the file orglist.js
+
+While we realize that this may not be as efficient as storing the information in a SQL database, we ultimately decided to do it this way because it was the easiest way to implement the instant search and drop-down feature and while this could mean a slower initial download time, the search is much faster after the information is loaded because the search doesn't require a call from ther server and back. 
+
+One drawback of using the array is that the organizations are not displayed in alphabetical order and we didn't have enough time to research how to display everything in alphabetical order from an array. 
+
+The checkboxes have values and the search function detects whether each box has been checked and adjusts the results from their. One feature of the checkboxes is that we wrote the checkcat() function to make sure that if the "Any" checkboxes were checked, the other boxes were emptied and vice versa. 
+
+
+FAVORITES
+We do, however, make use of our knowledge of SQL and PHP in implementing the favorites feature. addfavs.php is called when the user clicks "add to favorites." This adds the organization to a database called "favorites." The name of the organization is then displayed on the left column of the search page and featured in more detail on the favorites page. 
+
+The left column on the search page only displays, in alphabetical order, the name of the organizations a user has favorited using AJAX to call the server and uses addfavs.php to perform the mysql queries. How, due to all the back and forth between javascript, PHP, and the mysql database, words with apostrophes in them were especially troublesome. For most of the javascript code, the escape() function worked well, but when tranferring the information from javascript to PHP to mysql and back, we couldn't find a way to escape the apostrophes correctly. As a result, there is some inefficiency in that the left column only displays the name and requires the user to navigate to a different page to actually edit their favorites. 
+
+On the favorites page, all the user's favorites are displayed by using PHP when the page is initially loaded. The minimizing and maximizing work the same way as the search page, but instead of adding favorites, you now delete favorites. The organization can be removed from the favorites list by using rmfavs.php, which uses AJAX to call up the rmfavs.php and performs the mysql query to remove the data. Then the page reloads and the "deleted" organization will have disappeared. 
+
+
+LOGIN
+In order to avoid dealing with users having to register for accounts, we decided to use Facebook's nifty login feature. This way, the users can just use their Facebook accounts and we can store their information using the cookie information and uid generated by Facebook. All the source code for the implementation of Facebook related features comes directly from Facebook. 
+
+One little quirk regarding favorites and login is that if the user doesn't login, their uid is effectively 0, but that's still a valid int according to the mysql database, so users could save information without logging in. A simple fix was to check the uid and make sure it's not zero before adding anything to the database.
+
+We also like the "like" feature because then more people can learn about our website through Facebook!
